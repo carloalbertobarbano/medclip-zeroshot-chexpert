@@ -6,7 +6,7 @@ import numpy as np
 import warnings
 warnings.filterwarnings("ignore", module="urllib3")
 
-from medclip import MedCLIPModel, MedCLIPVisionModelViT
+from medclip import MedCLIPModel, MedCLIPVisionModelViT, MedCLIPVisionModel
 from medclip import MedCLIPProcessor
 
 from data.chexpert import ChexpertTest
@@ -29,10 +29,14 @@ def main():
     set_seed(0)
     device = "mps"
     processor = MedCLIPProcessor()
+    # model = MedCLIPModel(vision_cls=MedCLIPVisionModel)
     model = MedCLIPModel(vision_cls=MedCLIPVisionModelViT)
     model.from_pretrained(device=device)
     model.to(device)
     model.eval()
+
+    tot_parameters = sum([np.prod(p.size()) for p in model.parameters()])
+    print("Tot. parameters:", tot_parameters)
 
     cxr_labels: list[str] = [
         "Atelectasis",

@@ -83,6 +83,7 @@ def run_prediction(model: MedCLIPModel, pos_prompts_encodings, neg_prompts_encod
     with torch.no_grad():
         for i, (images, labels) in enumerate(tqdm(loader)):
             images = images.to(device)
+            print(labels.shape)
             # print(images.shape)
             # with torch.amp.autocast(device_type="cuda", dtype=torch.float16):
             image_features = model.encode_image(images)
@@ -113,8 +114,11 @@ def run_prediction(model: MedCLIPModel, pos_prompts_encodings, neg_prompts_encod
 
     pos_pred = torch.cat(pos_pred).detach().cpu().numpy()
     neg_pred = torch.cat(neg_pred).detach().cpu().numpy()
-    print("y_true:", y_true.shape)
-    y_true = np.array(y_true, dtype=int)
+    print("y_true:", y_true)
+    # print("y_true:", y_true.shape)
+    y_true = torch.stack(y_true).detach().cpu().numpy()
+    # y_true = np.array(y_true, dtype=int)
+    print("pos_pred", pos_pred.shape, "neg_pred", neg_pred.shape, "y_true:", y_true.shape)
     return pos_pred, neg_pred, y_true
 
 

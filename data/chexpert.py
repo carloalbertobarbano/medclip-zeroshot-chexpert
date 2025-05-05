@@ -28,6 +28,6 @@ class ChexpertTest(torch.utils.data.Dataset):
         inputs = self.processor(images=image, return_tensors="pt")
         label = entry[self.labels].tolist()
 
-        return inputs['pixel_values'][0], label
+        return inputs['pixel_values'][0], torch.IntTensor(label)
 
 
